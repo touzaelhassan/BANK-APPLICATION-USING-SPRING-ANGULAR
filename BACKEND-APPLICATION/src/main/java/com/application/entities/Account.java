@@ -24,6 +24,6 @@ public abstract class Account {
     private AccountStatus accountStatus;
     @ManyToOne(fetch = FetchType.EAGER)
     private Customer customer;
-    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
     private List<Operation> operations;
 }

@@ -17,6 +17,6 @@ public class Customer {
     private Integer id;
     private String name;
     private String email;
-    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
     private List<Account> accounts;
 }

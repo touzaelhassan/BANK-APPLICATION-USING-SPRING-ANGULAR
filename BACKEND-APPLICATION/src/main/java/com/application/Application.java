@@ -1,5 +1,7 @@
 package com.application;
 
+import java.util.Date;
+import java.util.stream.Stream;
 import com.application.entities.*;
 import com.application.enums.AccountStatus;
 import com.application.enums.OperationType;
@@ -11,8 +13,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.util.Date;
-import java.util.stream.Stream;
 
 @SpringBootApplication
 public class Application {
@@ -39,7 +39,6 @@ public class Application {
 
             // ADD NEW ACCOUNTS
             customerRepository.findAll().forEach((DBCustomer) -> {
-
                 // ADD NEW CURRENT ACCOUNTS
                 CurrentAccount currentAccount = new CurrentAccount();
                 currentAccount.setBalance(Math.random() * 90000);
@@ -48,7 +47,6 @@ public class Application {
                 currentAccount.setCustomer(DBCustomer);
                 currentAccount.setOverDraft(9000);
                 accountRepository.save(currentAccount);
-
                 // ADD NEW SAVING ACCOUNTS
                 SavingAccount savingAccount = new SavingAccount();
                 savingAccount.setBalance(Math.random() * 90000);
@@ -57,12 +55,10 @@ public class Application {
                 savingAccount.setCustomer(DBCustomer);
                 savingAccount.setInterestRate(5.5);
                 accountRepository.save(savingAccount);
-
             });
 
             // ADD NEW OPERATIONS
             accountRepository.findAll().forEach((account) -> {
-
                 for(int i = 0; i < 5; i++){
                     Operation operation = new Operation();
                     operation.setOperationDate(new Date());
@@ -71,7 +67,6 @@ public class Application {
                     operation.setAccount(account);
                     operationRepository.save(operation);
                 }
-
             });
 
         };
