@@ -1,7 +1,6 @@
 package com.application.entities;
 
 import java.util.Date;
-
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +18,7 @@ public class Operation {
     private Integer id;
     private Date operationDate;
     private double amount;
+    @Enumerated(EnumType.STRING)
     private OperationType operationType;
     @ManyToOne
     private Account account;

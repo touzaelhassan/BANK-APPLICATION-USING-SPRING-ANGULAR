@@ -28,6 +28,7 @@ public class Application {
             OperationRepository operationRepository
     ) {
         return (args) -> {
+
             // ADD NEW CUSTOMERS
             Stream.of("hassan", "kamal", "adil").forEach((name) -> {
                 Customer customer = new Customer();

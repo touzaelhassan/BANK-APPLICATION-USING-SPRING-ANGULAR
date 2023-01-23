@@ -2,7 +2,6 @@ package com.application.entities;
 
 import java.util.Date;
 import java.util.List;
-
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
