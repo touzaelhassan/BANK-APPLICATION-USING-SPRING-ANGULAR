@@ -1,12 +1,10 @@
 package com.application.entities;
 
 import java.util.List;
-
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-
 
 @Data
 @NoArgsConstructor
@@ -19,6 +17,6 @@ public class Customer {
     private Integer id;
     private String name;
     private String email;
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<Account> accounts;
 }

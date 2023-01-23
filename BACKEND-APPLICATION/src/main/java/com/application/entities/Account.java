@@ -15,15 +15,16 @@ import com.application.enums.AccountStatus;
 @Entity
 @Table(name = "accounts")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class Account {
+public abstract class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
+    private Integer id;
     private double balance;
     private Date createdAt;
+    @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Customer customer;
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
     private List<Operation> operations;
 }
