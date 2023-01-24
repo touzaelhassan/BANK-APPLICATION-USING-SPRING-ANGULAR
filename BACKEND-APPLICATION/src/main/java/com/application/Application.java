@@ -42,24 +42,25 @@ public class Application {
                try {
                    accountServiceBean.addCurrentAccount(customer.getId(),Math.random() * 90000, 9000);
                    accountServiceBean.addSavingAccount(customer.getId(), Math.random() * 120000, 5.5);
-                   List<AccountDTO> accountDTOS = accountServiceBean.getAccounts();
-                   for(AccountDTO accountDTO: accountDTOS){
-                       for (int i = 0; i < 5; i++) {
-                           Integer accountDTOId;
-                           if(accountDTO instanceof SavingAccountDTO){
-                               accountDTOId = ((SavingAccountDTO) accountDTO).getId();
-
-                           }else{
-                               accountDTOId = ((CurrentAccountDTO) accountDTO).getId();
-                           }
-                           accountServiceBean.credit(accountDTOId, 10000 + Math.random() * 120000, "Credit");
-                           accountServiceBean.debit(accountDTOId, 1000 + Math.random() * 9000, "Debit");
-                       }
-                   }
-               } catch (CustomerNotFoundException | AccountNotFoundException | BalanceNotSufficientException e) {
+               } catch (CustomerNotFoundException e) {
                    e.printStackTrace();
                }
            });
+
+            List<AccountDTO> accountDTOS = accountServiceBean.getAccounts();
+            for(AccountDTO accountDTO: accountDTOS){
+                for (int i = 0; i < 10; i++) {
+                    Integer accountDTOId;
+                    if(accountDTO instanceof SavingAccountDTO){
+                        accountDTOId = ((SavingAccountDTO) accountDTO).getId();
+
+                    }else{
+                        accountDTOId = ((CurrentAccountDTO) accountDTO).getId();
+                    }
+                    accountServiceBean.credit(accountDTOId, 10000 + Math.random() * 120000, "Credit");
+                    accountServiceBean.debit(accountDTOId, 1000 + Math.random() * 9000, "Debit");
+                }
+            }
         };
     }
 }
