@@ -4,10 +4,7 @@ import com.application.dtos.CustomerDTO;
 import com.application.exceptions.CustomerNotFoundException;
 import com.application.services.specifications.CustomerServiceSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,5 +28,19 @@ public class CustomerController {
     public CustomerDTO getCustomerById(@PathVariable Integer id) throws CustomerNotFoundException {
         return customerServiceBean.getCustomerById(id);
     }
+
+    @PostMapping("/customer/add")
+    public CustomerDTO addCustomer(@RequestBody CustomerDTO customerDTO){
+        return customerServiceBean.addCustomer(customerDTO);
+    }
+
+    @PutMapping("/customer/update/{id}")
+    public CustomerDTO updateCustomer(@PathVariable Integer id, @RequestBody CustomerDTO customerDTO){
+        customerDTO.setId(id);
+        return customerServiceBean.updateCustomer(customerDTO);
+    }
+
+    @DeleteMapping("/customer/delete/{id}")
+    public void updateCustomer(@PathVariable Integer id){ customerServiceBean.deleteCustomer(id); }
 
 }

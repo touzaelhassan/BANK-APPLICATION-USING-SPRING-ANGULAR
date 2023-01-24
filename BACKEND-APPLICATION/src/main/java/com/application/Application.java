@@ -2,6 +2,8 @@ package com.application;
 
 import java.util.List;
 import java.util.stream.Stream;
+
+import com.application.dtos.CustomerDTO;
 import com.application.entities.*;
 import com.application.exceptions.AccountNotFoundException;
 import com.application.exceptions.BalanceNotSufficientException;
@@ -28,10 +30,10 @@ public class Application {
         return (args) -> {
 
            Stream.of("hassan", "imane", "mohammed").forEach((name) -> {
-               Customer customer = new Customer();
-               customer.setName(name);
-               customer.setEmail(name + "@gmail.com");
-               customerServiceBean.addCustomer(customer);
+               CustomerDTO customerDTO = new CustomerDTO();
+               customerDTO.setName(name);
+               customerDTO.setEmail(name + "@gmail.com");
+               customerServiceBean.addCustomer(customerDTO);
            });
 
            customerServiceBean.getCustomers().forEach((customer) -> {

@@ -28,9 +28,19 @@ public class CustomerServiceImplementation implements CustomerServiceSpecificati
     }
 
     @Override
-    public Customer addCustomer(Customer customer) {
-        return customerRepositoryBean.save(customer);
+    public CustomerDTO addCustomer(CustomerDTO customerDTO) {
+        Customer customer = customerMapperBean.fromCustomerDTO(customerDTO);
+        Customer savedCustomer = customerRepositoryBean.save(customer);
+        return customerMapperBean.fromCustomer(savedCustomer);
     }
+
+    @Override
+    public CustomerDTO updateCustomer(CustomerDTO customerDTO) {
+        Customer customer = customerMapperBean.fromCustomerDTO(customerDTO);
+        Customer savedCustomer = customerRepositoryBean.save(customer);
+        return customerMapperBean.fromCustomer(savedCustomer);
+    }
+
     @Override
     public CustomerDTO getCustomerById(Integer id) throws CustomerNotFoundException {
         Customer customer = customerRepositoryBean.findById(id).orElseThrow(() -> new CustomerNotFoundException("Customer Not Found !!."));
@@ -41,5 +51,8 @@ public class CustomerServiceImplementation implements CustomerServiceSpecificati
         List<Customer> customers = customerRepositoryBean.findAll();
         return customers.stream().map(customerMapperBean::fromCustomer).collect(Collectors.toList());
     }
+
+    @Override
+    public void deleteCustomer(Integer id) { customerRepositoryBean.deleteById(id); }
 
 }
