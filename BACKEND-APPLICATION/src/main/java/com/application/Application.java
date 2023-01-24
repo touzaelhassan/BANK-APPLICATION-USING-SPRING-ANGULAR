@@ -3,8 +3,10 @@ package com.application;
 import java.util.List;
 import java.util.stream.Stream;
 
+import com.application.dtos.AccountDTO;
+import com.application.dtos.CurrentAccountDTO;
 import com.application.dtos.CustomerDTO;
-import com.application.entities.*;
+import com.application.dtos.SavingAccountDTO;
 import com.application.exceptions.AccountNotFoundException;
 import com.application.exceptions.BalanceNotSufficientException;
 import com.application.exceptions.CustomerNotFoundException;
@@ -40,11 +42,18 @@ public class Application {
                try {
                    accountServiceBean.addCurrentAccount(customer.getId(),Math.random() * 90000, 9000);
                    accountServiceBean.addSavingAccount(customer.getId(), Math.random() * 120000, 5.5);
-                   List<Account> accounts = accountServiceBean.getAccounts();
-                   for(Account account: accounts){
+                   List<AccountDTO> accountDTOS = accountServiceBean.getAccounts();
+                   for(AccountDTO accountDTO: accountDTOS){
                        for (int i = 0; i < 5; i++) {
-                           accountServiceBean.credit(account.getId(), 10000 + Math.random() * 120000, "Credit");
-                           accountServiceBean.debit(account.getId(), 1000 + Math.random() * 9000, "Debit");
+                           Integer accountDTOId;
+                           if(accountDTO instanceof SavingAccountDTO){
+                               accountDTOId = ((SavingAccountDTO) accountDTO).getId();
+
+                           }else{
+                               accountDTOId = ((CurrentAccountDTO) accountDTO).getId();
+                           }
+                           accountServiceBean.credit(accountDTOId, 10000 + Math.random() * 120000, "Credit");
+                           accountServiceBean.debit(accountDTOId, 1000 + Math.random() * 9000, "Debit");
                        }
                    }
                } catch (CustomerNotFoundException | AccountNotFoundException | BalanceNotSufficientException e) {

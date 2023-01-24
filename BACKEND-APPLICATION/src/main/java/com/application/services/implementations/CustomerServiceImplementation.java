@@ -6,16 +6,12 @@ import com.application.exceptions.CustomerNotFoundException;
 import com.application.mappers.CustomerMapperImplementation;
 import com.application.repositories.CustomerRepository;
 import com.application.services.specifications.CustomerServiceSpecification;
-import jakarta.transaction.Transactional;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service("customerServiceBean")
-@Transactional
-@Slf4j
 public class CustomerServiceImplementation implements CustomerServiceSpecification {
 
     private final CustomerRepository customerRepositoryBean;
