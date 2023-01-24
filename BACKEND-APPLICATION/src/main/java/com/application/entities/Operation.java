@@ -1,10 +1,11 @@
 package com.application.entities;
 
-import java.util.Date;
-import jakarta.persistence.*;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
+import java.util.Date;
 import com.application.enums.OperationType;
 
 @Data
