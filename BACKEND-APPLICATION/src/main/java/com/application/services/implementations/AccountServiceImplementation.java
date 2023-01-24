@@ -13,6 +13,7 @@ import com.application.exceptions.CustomerNotFoundException;
 import com.application.mappers.AccountMapperImplementation;
 import com.application.mappers.CustomerMapperImplementation;
 import com.application.repositories.AccountRepository;
+import com.application.repositories.OperationRepository;
 import com.application.services.specifications.AccountServiceSpecification;
 import com.application.services.specifications.CustomerServiceSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +25,17 @@ import java.util.stream.Collectors;
 @Service("accountServiceBean")
 public class AccountServiceImplementation implements AccountServiceSpecification {
 
-    private final CustomerServiceSpecification customerServiceBean;
-    private final OperationServiceImplementation operationServiceBean;
     private final AccountRepository accountRepositoryBean;
+    private final OperationRepository operationRepositoryBean;
+    private final CustomerServiceSpecification customerServiceBean;
     private final CustomerMapperImplementation customerMapperBean;
     private final AccountMapperImplementation accountMapperBean;
 
     @Autowired
-    public AccountServiceImplementation(CustomerServiceSpecification customerServiceBean, OperationServiceImplementation operationServiceBean, AccountRepository accountRepositoryBean, CustomerMapperImplementation customerMapperBean, AccountMapperImplementation accountMapperBean) {
+    public AccountServiceImplementation(CustomerServiceSpecification customerServiceBean, AccountRepository accountRepositoryBean, OperationRepository operationRepositoryBean, CustomerMapperImplementation customerMapperBean, AccountMapperImplementation accountMapperBean) {
         this.customerServiceBean = customerServiceBean;
-        this.operationServiceBean = operationServiceBean;
         this.accountRepositoryBean = accountRepositoryBean;
+        this.operationRepositoryBean = operationRepositoryBean;
         this.customerMapperBean = customerMapperBean;
         this.accountMapperBean = accountMapperBean;
     }
@@ -107,7 +108,7 @@ public class AccountServiceImplementation implements AccountServiceSpecification
         operation.setDescription(description);
         operation.setOperationDate(new Date());
         operation.setAccount(account);
-        operationServiceBean.addOperation(operation);
+        operationRepositoryBean.save(operation);
         account.setBalance(account.getBalance() - amount);
         accountRepositoryBean.save(account);
     }
@@ -121,7 +122,7 @@ public class AccountServiceImplementation implements AccountServiceSpecification
         operation.setDescription(description);
         operation.setOperationDate(new Date());
         operation.setAccount(account);
-        operationServiceBean.addOperation(operation);
+        operationRepositoryBean.save(operation);
         account.setBalance(account.getBalance() + amount);
         accountRepositoryBean.save(account);
     }
