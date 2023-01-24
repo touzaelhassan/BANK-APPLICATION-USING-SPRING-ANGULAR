@@ -2,6 +2,7 @@ package com.application.services.implementations;
 
 import com.application.dtos.CustomerDTO;
 import com.application.entities.Customer;
+import com.application.exceptions.CustomerNotFoundException;
 import com.application.mappers.CustomerMapperImplementation;
 import com.application.repositories.CustomerRepository;
 import com.application.services.specifications.CustomerServiceSpecification;
@@ -31,7 +32,10 @@ public class CustomerServiceImplementation implements CustomerServiceSpecificati
         return customerRepositoryBean.save(customer);
     }
     @Override
-    public Customer getCustomerById(Integer id) { return customerRepositoryBean.findById(id).orElse(null); }
+    public CustomerDTO getCustomerById(Integer id) throws CustomerNotFoundException {
+        Customer customer = customerRepositoryBean.findById(id).orElseThrow(() -> new CustomerNotFoundException("Customer Not Found !!."));
+        return customerMapperBean.fromCustomer(customer);
+    }
     @Override
     public List<CustomerDTO> getCustomers() {
         List<Customer> customers = customerRepositoryBean.findAll();

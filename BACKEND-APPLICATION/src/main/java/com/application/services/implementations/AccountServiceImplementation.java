@@ -1,17 +1,18 @@
 package com.application.services.implementations;
 
+import com.application.dtos.CustomerDTO;
 import com.application.entities.*;
 import com.application.enums.AccountStatus;
 import com.application.enums.OperationType;
 import com.application.exceptions.AccountNotFoundException;
 import com.application.exceptions.BalanceNotSufficientException;
 import com.application.exceptions.CustomerNotFoundException;
+import com.application.mappers.CustomerMapperImplementation;
 import com.application.repositories.AccountRepository;
 import com.application.services.specifications.AccountServiceSpecification;
 import com.application.services.specifications.CustomerServiceSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.List;
 
@@ -21,17 +22,21 @@ public class AccountServiceImplementation implements AccountServiceSpecification
     private final CustomerServiceSpecification customerServiceBean;
     private final OperationServiceImplementation operationServiceBean;
     private final AccountRepository accountRepositoryBean;
+    private final CustomerMapperImplementation customerMapperBean;
+
 
     @Autowired
-    public AccountServiceImplementation(CustomerServiceSpecification customerServiceBean, OperationServiceImplementation operationServiceBean, AccountRepository accountRepositoryBean) {
+    public AccountServiceImplementation(CustomerServiceSpecification customerServiceBean, OperationServiceImplementation operationServiceBean, AccountRepository accountRepositoryBean, CustomerMapperImplementation customerMapperBean) {
         this.customerServiceBean = customerServiceBean;
         this.operationServiceBean = operationServiceBean;
         this.accountRepositoryBean = accountRepositoryBean;
+        this.customerMapperBean = customerMapperBean;
     }
 
     @Override
     public CurrentAccount addCurrentAccount(Integer customerId, double initialBalance, double overDraft) throws CustomerNotFoundException {
-        Customer customer = customerServiceBean.getCustomerById(customerId);
+        CustomerDTO customerDTO = customerServiceBean.getCustomerById(customerId);
+        Customer customer = customerMapperBean.fromCustomerDTO(customerDTO);
         if(customer == null){ throw new CustomerNotFoundException("Customer not found !!."); }
         CurrentAccount currentAccount = new CurrentAccount();
         currentAccount.setCreatedAt(new Date());
@@ -44,7 +49,8 @@ public class AccountServiceImplementation implements AccountServiceSpecification
 
     @Override
     public SavingAccount addSavingAccount(Integer customerId, double initialBalance, double interestRate) throws CustomerNotFoundException {
-        Customer customer = customerServiceBean.getCustomerById(customerId);
+        CustomerDTO customerDTO = customerServiceBean.getCustomerById(customerId);
+        Customer customer = customerMapperBean.fromCustomerDTO(customerDTO);
         if(customer == null){ throw new CustomerNotFoundException("Customer not found !!."); }
         SavingAccount savingAccount = new SavingAccount();
         savingAccount.setCreatedAt(new Date());
