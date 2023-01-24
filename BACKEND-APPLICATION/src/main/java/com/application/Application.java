@@ -42,7 +42,7 @@ public class Application {
                    for(Account account: accounts){
                        for (int i = 0; i < 5; i++) {
                            accountServiceBean.credit(account.getId(), 10000 + Math.random() * 120000, "Credit");
-                           accountServiceBean.credit(account.getId(), 10000 + Math.random() * 120000, "Credit");
+                           accountServiceBean.debit(account.getId(), 1000 + Math.random() * 9000, "Debit");
                        }
                    }
                } catch (CustomerNotFoundException | AccountNotFoundException | BalanceNotSufficientException e) {
