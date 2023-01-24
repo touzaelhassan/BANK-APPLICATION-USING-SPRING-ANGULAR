@@ -1,13 +1,13 @@
 package com.application;
 
-import java.util.Date;
+import java.util.List;
 import java.util.stream.Stream;
 import com.application.entities.*;
-import com.application.enums.AccountStatus;
-import com.application.enums.OperationType;
-import com.application.repositories.AccountRepository;
-import com.application.repositories.CustomerRepository;
-import com.application.repositories.OperationRepository;
+import com.application.exceptions.AccountNotFoundException;
+import com.application.exceptions.BalanceNotSufficientException;
+import com.application.exceptions.CustomerNotFoundException;
+import com.application.services.specifications.AccountServiceSpecification;
+import com.application.services.specifications.CustomerServiceSpecification;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,52 +22,33 @@ public class Application {
 
     @Bean
     CommandLineRunner start(
-            CustomerRepository customerRepository,
-            AccountRepository accountRepository,
-            OperationRepository operationRepository
+          CustomerServiceSpecification customerServiceBean,
+          AccountServiceSpecification accountServiceBean
     ) {
         return (args) -> {
 
-            // ADD NEW CUSTOMERS
-            Stream.of("hassan", "kamal", "adil").forEach((name) -> {
-                Customer customer = new Customer();
-                customer.setName(name);
-                customer.setEmail(name + "@gmail.com");
-                customerRepository.save(customer);
-            });
+           Stream.of("hassan", "imane", "mohammed").forEach((name) -> {
+               Customer customer = new Customer();
+               customer.setName(name);
+               customer.setEmail(name + "@gmail.com");
+               customerServiceBean.addCustomer(customer);
+           });
 
-            // ADD NEW ACCOUNTS
-            customerRepository.findAll().forEach((DBCustomer) -> {
-                // ADD NEW CURRENT ACCOUNTS
-                CurrentAccount currentAccount = new CurrentAccount();
-                currentAccount.setBalance(Math.random() * 90000);
-                currentAccount.setCreatedAt(new Date());
-                currentAccount.setAccountStatus(AccountStatus.CREATED);
-                currentAccount.setCustomer(DBCustomer);
-                currentAccount.setOverDraft(9000);
-                accountRepository.save(currentAccount);
-                // ADD NEW SAVING ACCOUNTS
-                SavingAccount savingAccount = new SavingAccount();
-                savingAccount.setBalance(Math.random() * 90000);
-                savingAccount.setCreatedAt(new Date());
-                savingAccount.setAccountStatus(AccountStatus.CREATED);
-                savingAccount.setCustomer(DBCustomer);
-                savingAccount.setInterestRate(5.5);
-                accountRepository.save(savingAccount);
-            });
-
-            // ADD NEW OPERATIONS
-            accountRepository.findAll().forEach((account) -> {
-                for(int i = 0; i < 5; i++){
-                    Operation operation = new Operation();
-                    operation.setOperationDate(new Date());
-                    operation.setAmount(Math.random() * 12000);
-                    operation.setOperationType(Math.random() > 0.5 ? OperationType.DEBIT : OperationType.CREDIT);
-                    operation.setAccount(account);
-                    operationRepository.save(operation);
-                }
-            });
-
+           customerServiceBean.getCustomers().forEach((customer) -> {
+               try {
+                   accountServiceBean.addCurrentAccount(customer.getId(),Math.random() * 90000, 9000);
+                   accountServiceBean.addSavingAccount(customer.getId(), Math.random() * 120000, 5.5);
+                   List<Account> accounts = accountServiceBean.getAccounts();
+                   for(Account account: accounts){
+                       for (int i = 0; i < 5; i++) {
+                           accountServiceBean.credit(account.getId(), 10000 + Math.random() * 120000, "Credit");
+                           accountServiceBean.credit(account.getId(), 10000 + Math.random() * 120000, "Credit");
+                       }
+                   }
+               } catch (CustomerNotFoundException | AccountNotFoundException | BalanceNotSufficientException e) {
+                   e.printStackTrace();
+               }
+           });
         };
     }
 }

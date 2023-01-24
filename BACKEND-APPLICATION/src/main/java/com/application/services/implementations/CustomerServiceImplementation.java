@@ -28,6 +28,6 @@ public class CustomerServiceImplementation implements CustomerServiceSpecificati
     @Override
     public Customer getCustomerById(Integer id) { return customerRepositoryBean.findById(id).orElse(null); }
     @Override
-    public List<Customer> getCustomers() { return null; }
+    public List<Customer> getCustomers() { return customerRepositoryBean.findAll(); }
 
 }
