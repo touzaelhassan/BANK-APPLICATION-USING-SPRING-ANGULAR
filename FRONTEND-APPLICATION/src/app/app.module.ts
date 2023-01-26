@@ -21,4 +21,5 @@ import { AccountsComponent } from './components/accounts/accounts.component';
   providers: [],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }
