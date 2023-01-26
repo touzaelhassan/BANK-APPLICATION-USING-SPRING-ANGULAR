@@ -1,13 +1,11 @@
 package com.application.controllers;
 
-
 import com.application.dtos.AccountHistoryDTO;
 import com.application.dtos.OperationDTO;
 import com.application.exceptions.AccountNotFoundException;
 import com.application.services.specifications.OperationServiceSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -22,7 +20,6 @@ public class OperationController {
 
     @GetMapping("/account/{id}/operations")
     public List<OperationDTO> getOperationsByAccountId(@PathVariable Integer id){ return operationServiceBean.getOperationsByAccountId(id); }
-
     @GetMapping("/account/{accountId}/page-operations")
     public  AccountHistoryDTO getAccountHistoryDTO(
             @PathVariable Integer accountId,
@@ -31,6 +28,7 @@ public class OperationController {
            ) throws AccountNotFoundException {
         return operationServiceBean.getAccountHistory(accountId, page, size);
     }
+
 }
 
 
